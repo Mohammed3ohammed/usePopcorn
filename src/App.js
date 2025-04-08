@@ -47,7 +47,7 @@ const tempWatchedData = [
   },
 ];
 
-  const average = (arr) => arr.reduce((acc, cur, i, arr) => arr.length, 0)
+  const average = (arr) => arr.reduce((acc, cur, i, arr) =>  acc + cur /  arr.length, 0)
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
@@ -136,7 +136,7 @@ export default function App() {
         <div>
         <ul className="list">
           {movies?.map((movie) => (
-            <Movie movie={movie} key={movie.imbdID} />
+            <Movie movie={movie} key={movie.imdbID} />
           ))}
         </ul>
         </div>
@@ -147,7 +147,7 @@ export default function App() {
       return (
         <div>
           <li>
-            <imag src={movie.Poster} alt={`${movie.Title} poster`} />
+            <img src={movie.Poster} alt={`${movie.Title} poster`} />
             <h3>{movie.Title}</h3>
             <div>
               <p>
@@ -194,7 +194,7 @@ export default function App() {
             <ul className="list">
                 {
                   watched.map((movie) => (
-                    <WatchedMovie movie={movie} key={movie.imbdID} />
+                    <WatchedMovie movie={movie} key={movie.imdbID} />
                   ))}
             </ul>
       )
