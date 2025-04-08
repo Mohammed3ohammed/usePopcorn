@@ -32,6 +32,15 @@ export default function App() {
         <Search />
         <NumResults movies={movies} />
         </NavBar>
+
+        <Main>
+          <Box> < MovieList movies={movies} /></Box>
+          <Box>
+            <WatchedSummary watched={watched} />
+            <WatchedMoviesList watched={watched} />
+            </Box>
+        </Main>
+
     </>
 
   )
@@ -77,6 +86,87 @@ export default function App() {
                 </p>
             </div>
         )
+    }
+    function Main( {children} ) {
+        return (
+          <main className="main">
+            {children}
+          </main>
+        )
+    }
+
+    function Box( {children} ) {
+      const [isOpen, setIsOpen] = useState(true);
+      return (
+        <div className="box">
+          <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>{isOpen ? "–" : "+"}</button>
+          {isOpen && children} 
+        </div>
+      )
+    }
+
+    function MovieList({ movies }) {
+      return(
+        <div>
+        <ul className="list">
+          {movies?.map((movie) => (
+            <Movie movie={movie} key={movie.imbdID} />
+          ))}
+        </ul>
+        </div>
+      )
+    }
+
+    function Movie( {movie} ) {
+      return (
+        <div>
+          <li>
+            <imag src={movie.Poster} alt={`${movie.Title} poster`} />
+            <h3>{movie.Title}</h3>
+            <div>
+              <p>
+                <span>🗓</span>
+                <span>{movie.Year}</span>
+              </p>
+            </div>
+          </li>
+        </div>
+      )
+    }
+    function WatchedSummary( {watched} ) {
+      const avgImdbRating = average(watched.map(movie.imdbRating));
+      const avgUserRating  = average(watched.map(movie.userRating));
+      const avgRuntime = average(watched.map(movie.runtime));
+
+      return (
+        <div className="summary">
+          <h2>Movies you watched</h2>
+          <div>
+            <p>
+              <span>#️⃣</span>
+              <span>{watched.length} movies</span>
+            </p>
+            <p>
+            <span>{avgImdbRating}</span>
+            </p>
+            <p>
+              <span>⏳</span>
+              <span>{avgRuntime}</span>
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    function WatchedMoviesList( {watched} ) {
+      return (
+            <ul className="list">
+                {
+                  watched.map((movie) => (
+                    <WatchedMoviesList movie={movie} key={movie.imbdID} />
+                  ))}
+            </ul>
+      )
     }
 };
 
