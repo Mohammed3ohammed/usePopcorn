@@ -11,8 +11,32 @@ const starContainerStyle = {
     display: "flex"
 }
 
+StartRating.propTypes = {
+    maxRating: propTypes.number,
+    defaultRating: propTypes.string,
+    size: PropTypes.string,
+    messages: PropTypes.array,
+    className: PropTypes.string,
+    onSetRating: PropTypes.func,
 
-export default function StarRating() {
+}
+
+export default function StarRating( {maxRating = 5, color = "#fcc419", size = 48, className="", defaultRating = 0, onSetRating,}) {
+    const [rating, setRating] = (defaultRating);
+    const [tempRating, setTempRating] = useState(0);
+
+    function handleRating(rating) {
+        setRating(rating);
+        onSetRating(rating);
+    }
+
+    const textStyle = {
+        lineHeight: "1",
+        margin: "10",
+        color, 
+        fontSize: `${size / 1.5}px`
+    }
+
     return (
         <div style={containerStyle} className="className">
             <div style={starContainerStyle}>
@@ -28,6 +52,10 @@ export default function StarRating() {
                 />
             ))}
             </div>
+            <p style={textStyle}>
+                {messages.length === maxRating ? messages[tempRating ? tempRating - 1 : rating - 1]
+                : tempRating || rating || ""} 
+            </p>
         </div>
     )
-}
+};
