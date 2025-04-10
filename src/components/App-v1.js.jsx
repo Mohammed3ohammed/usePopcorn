@@ -54,11 +54,50 @@ const tempMovieData = [
     const [movies, setMovies] = useState(tempMovieData);
     const [watched, setWatched] = useState(tempWatchedData); 
 
+
     return (
+
+        <>
+        <NavBar>
+        <Search />
+        <NumResults movies={movies} />
+        </NavBar>
+        </>
+    )   
+}
+
+
         function NavBar({ children }) {
-        <nav className="nav-bar">
-            <Logo />
-            {children}
-        </nav>
-    })
-  }
+            return (
+                <nav className="nav-bar">
+                <Logo />
+                {children}
+            </nav>
+            )
+        }
+
+    function Logo() {
+        return(
+            <div className="logo">
+            <span role="img">🍿</span>
+            <h1>usePopcorn</h1>
+        </div>
+        )}
+
+        function Search() {
+            const [query, setQuery] = useState("");
+
+            return (
+                <input 
+                className="serch" type="text"  placeholder="search movies..." value={query} onChange={(e) => setQuery(e.target.value)} />
+
+            )
+        }
+
+        function NumResults({ movies }) {
+            return (
+                <p className="num-results">
+                    Found <strong>{movies.length}</strong> results
+                </p>
+            )
+        }
