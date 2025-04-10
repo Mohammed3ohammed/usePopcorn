@@ -161,3 +161,38 @@ const tempMovieData = [
         </li>
     )
   }
+
+  function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched })  {
+    const [movie, setMovie] = useState({});
+    const [isLoading, setLoading] = useState("");
+    const [userRating, setUserRating] = useState("");
+
+    const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+    const watchedUserRating = watched.find(
+        (movie) => movie.imdbID === selectedId
+    )?.userRating;
+    const {
+        Title: title,
+        Year: year,
+        Runtime: runtime,
+        imdbRating,
+        Plot: plot,
+        Released: released,
+        Actors: actors,
+        Director: director,
+        Genre: genre,
+    } = movie;
+  }
+function handleAdd() {
+    const newWatchedMovie = {
+        imdbID: selectedId,
+        title,
+        year,
+        poster,
+        imdbRating: Number(imdbRating),
+        runtime: Number(runtime.split(" ").at(0)),
+        userRating,
+    };
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  }
