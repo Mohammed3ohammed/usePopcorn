@@ -38,7 +38,14 @@ export default function App() {
         <Search  />
         <NumResults movies={movies} />
       </NavBar>
-
+      
+    <Main>
+        <Box>
+             {isLoading ? <Loader /> : <MovieList movies={movies} />}
+        </Box>
+        <Box>
+        </Box>
+      </Main>
       
     </>
   );
@@ -82,5 +89,54 @@ function NumResults({ movies }) {
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
     </p>
+  );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+
+function Main({ children }) {
+  return <main className="main">{children}</main>;
+}
+
+function Box({ children }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="box">
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+        {isOpen ? "–" : "+"}
+      </button>
+
+      {isOpen && children}
+    </div>
+  );
+}
+
+
+
+function MovieList({ movies, onSelectMovie }) {
+  return (
+    <ul className="list list-movies">
+      {movies?.map((movie) => (
+        <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
+      ))}
+    </ul>
+  );
+}
+
+function Movie({ movie, onSelectMovie }) {
+  return (
+    <li onClick={() => onSelectMovie(movie.imdbID)}>
+      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title}</h3>
+      <div>
+        <p>
+          <span>🗓</span>
+          <span>{movie.Year}</span>
+        </p>
+      </div>
+    </li>
   );
 }
