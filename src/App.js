@@ -1,5 +1,5 @@
 import {useEffect, useState } from "react";
-
+import StarRating from "./StarRating";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -11,9 +11,17 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-   const [error, setError] = useState('');
-    const [query, setQuery] = useState("")
-    const tempQuery = "interstellar"
+  const [error, setError] = useState('');
+  const [query, setQuery] = useState("inception");
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+  function handleCloseMovie () {
+    setSelectedId(null)
+  }
+
 
 
     useEffect(() => {
@@ -25,7 +33,7 @@ export default function App() {
            // Send a request to the OMDB API with the given API key and search query
             setError("");
 
-          const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${tempQuery}`);
+          const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
 
           if(!res.ok) throw new Error("Something went wrong with fetching movies")
           
@@ -46,6 +54,14 @@ export default function App() {
         }
         }
 
+        if (query.length < 3) {
+          setMovies([])
+          setError("")
+          return;
+        }
+
+
+
         fetchMovies()
 
     }, [query])  // Empty dependency array means this useEffect runs only once when the component mounts
@@ -59,20 +75,16 @@ export default function App() {
       
     <Main>
         <Box>
-             {!isLoading && !error && <MovieList movies={movies} />}
+             {isLoading && <Loader />}
+             {!isLoading && !error && <MovieList movies={movies} onSelectMovie={handleSelectMovie} />}
              {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-        <MovieDetails
-              watched={watched}
-            />
-
-<>
+          {selectedId ? <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie} /> :
+            <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList
-                watched={watched}
-              />
-            </>
+              <WatchedMoviesList watched={watched} />
+            </>}
         </Box>
       </Main>
       
@@ -220,6 +232,17 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   }
 
+  useEffect(() => {
+    async function getMovieDetails() {
+      setIsLoading(true);
+      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`)
+      const data = await res.json()
+      setMovie(data)
+      setIsLoading(false);
+    } 
+    getMovieDetails()
+  }, []);
+
   return (
     <div className="details">
       {isLoading ? (
@@ -249,11 +272,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <div className="rating">
               {!isWatched ? (
                 <>
-                  {/* <StarRating
+                  { <StarRating
                     maxRating={10}
                     size={24}
                     onSetRating={setUserRating}
-                  /> */}
+                  /> }
                   {userRating > 0 && (
                     <button className="btn-add" onClick={handleAdd}>
                       + Add to list
@@ -277,6 +300,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     </div>
   );
 }
+
+
 
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
