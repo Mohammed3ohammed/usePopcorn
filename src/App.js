@@ -21,7 +21,13 @@ export default function App() {
   function handleCloseMovie () {
     setSelectedId(null)
   }
+  function handleAddWatched(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
 
+  function handleDeleteWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id))
+  }
 
 
     useEffect(() => {
@@ -80,11 +86,19 @@ export default function App() {
              {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-          {selectedId ? <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie} /> :
+          {selectedId ? ( 
+          <MovieDetails selectedId={selectedId}
+           onCloseMovie={handleCloseMovie}
+           onAddWatched={handleAddWatched}
+           watched={watched} />
+           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
-            </>}
+              <WatchedMoviesList 
+              watched={watched} 
+              onDeleteWatched={handleAddWatched}/>
+            </>
+            )}
         </Box>
       </Main>
       
@@ -211,6 +225,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
+
   
   const isTop = imdbRating > 8;
   console.log(isTop);
@@ -241,7 +256,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       setIsLoading(false);
     } 
     getMovieDetails()
-  }, []);
+  }, [selectedId]);
+
+  useEffect(() => {
+    if(!title) return;
+    document.title = `Movive | ${title}`
+  }, [title]);
 
   return (
     <div className="details">

@@ -23,9 +23,9 @@ StartRating.propTypes = {
 }
 
 export default function StartRating(
-     {maxRating = 5, color = "#fcc419", size = 48, className="", messages = [] ,defaultRating = 0, onSetRating,}
-    ){
-    const [rating, setRating] = (defaultRating);
+     {maxRating = 5, color = "#fcc419", size = 48, className="", messages = [] ,defaultRating = 0, onSetRating,})
+     {
+    const [rating, setRating] = useState(defaultRating);
     const [tempRating, setTempRating] = useState(0);
 
     function handleRating(rating) {
