@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Loader from "../Main/Loader";
-import StartRating from "../../StarRating";
+import StarRating from "../../StarRating";
 
 const KEY = "f84fc31d";
 
@@ -113,32 +113,32 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
   
   
             <section>
-              <div className="rating">
-                {!isWatched ? (
-                  <>
-                    { <StartRating
-                      maxRating={10}
-                      size={24}
-                      onSetRating={setUserRating}
-                    /> }
-                    {userRating > 0 && (
-                      <button className="btn-add" onClick={handleAdd}>
-                        + Add to list
-                      </button>
-                    )}
-                  </>
-                ) : (
-                  <p>
-                    You rated with movie {watchedUserRating} <span>⭐️</span>
-                  </p>
-                )}
-              </div>
-              <p>
-                <em>{plot}</em>
-              </p>
-              <p>Starring {actors}</p>
-              <p>Directed by {director}</p>
-            </section>
+            <div className="rating">
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      + Add to list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>
+                  You rated with movie {watchedUserRating} <span>⭐️</span>
+                </p>
+              )}
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
           </>
         )}
       </div>
