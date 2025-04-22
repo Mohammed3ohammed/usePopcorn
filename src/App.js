@@ -10,6 +10,7 @@ import MovieList from "./components/Movie/MovieList";
 import MovieDetails from "./components/Movie/MovieDetails";
 import WatchedSummary from "./components/Watched/WatchedSummary";
 import WatchedMoviesList from "./components/Watched/WatchedMoviesList";
+import useLocalStorageState from "./components/Watched/useLocalStorageState";
 
 
 
@@ -17,11 +18,13 @@ const KEY = "f84fc31d";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
