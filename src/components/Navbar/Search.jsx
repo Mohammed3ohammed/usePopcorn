@@ -1,4 +1,5 @@
-import React from "react";
+import {React, useRef} from "react";
+import useKey from "./useKey";
 
 export default  function Search({ query, setQuery }) {
   const inputEl = useRef(null);
@@ -16,6 +17,7 @@ export default  function Search({ query, setQuery }) {
         placeholder="Search movies..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        ref={inputEl}
       />
     );
   }
